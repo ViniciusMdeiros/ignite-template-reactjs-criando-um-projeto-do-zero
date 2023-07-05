@@ -10,6 +10,7 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.7.1",
     "@prismicio/client": "^7.0.0",
     "@prismicio/helpers": "^2.3.0",
     "@prismicio/next": "^0.1.2",
@@ -28,8 +29,9 @@
     "yarn-audit-fix": "^9.3.10"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/node": "^14.14.31",
     "@types/prismic-dom": "^2.1.1",
     "@types/react": "^18.2.6",

@@ -1,1 +1,82 @@
-// TODO
+.container {
+  img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    object-position: 0px -160px;
+
+  }
+}
+
+.post {
+  max-width: 720px;
+  margin: auto;
+  h1 {
+    margin-top: 70px;
+    display: flex;
+    color: #F8F8F8;
+    font-size: 48px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.5px;
+  }
+  .divHeader {
+    margin-top: 25px;
+    display: flex;
+      span {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+
+
+        color: #BBBBBB;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin-right: 8px;
+        color: #BBBBBB;
+      }
+
+      h3 {
+        font-size: 18px;
+        margin-left: 24px;
+        margin-right: 8px;
+        color: #BBBBBB;
+      }
+      h4 {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+
+        color: #BBBBBB;
+      }
+  }
+  .postContent {
+
+    h5{
+      margin: 60px auto;
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: bold;
+      font-size: 36px;
+
+      color: #F8F8F8;
+    }
+    p{
+      margin: 40px auto;
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+
+      color: #BBBBBB;
+    }
+  }
+}

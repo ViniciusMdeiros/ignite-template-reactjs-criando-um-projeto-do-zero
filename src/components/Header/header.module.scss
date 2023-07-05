@@ -1,1 +1,16 @@
-// TODO
+.container {
+  display: flex;
+  width: 658.616px;
+  height: 103.629px;
+  padding: 0px 210px;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    &:hover {
+      filter: brightness(0.96);
+      transition: 0.2s;
+      cursor: pointer;
+    }
+  }
+}

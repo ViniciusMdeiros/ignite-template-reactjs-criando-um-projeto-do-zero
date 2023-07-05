@@ -1,12 +1,12 @@
 import { GetStaticProps } from 'next';
-import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
+import { FiCalendar, FiUser } from 'react-icons/fi';
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 import { getPrismicClient } from '../services/prismic';
 
-import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
 interface Post {
@@ -20,7 +20,7 @@ interface Post {
 }
 
 interface PostPagination {
-  next_page: string;
+  // next_page: string;
   results: Post[];
 }
 
@@ -28,78 +28,62 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
-export default function Home({ postsPagination }: HomeProps) {
-  const [post, setPost] = useState(postsPagination?.results);
-  const handleLoadMore = async (): Promise<boolean> => {
-    const response = await fetch(postsPagination?.next_page);
-    const data = await response.json();
+export default function Home({
+  // next_page,
+  results,
+}: PostPagination): ReactElement<HomeProps> {
+  const [visiblePosts, setVisiblePosts] = useState(2);
 
-    setPost([...post, ...data.results]);
-    return true;
-  };
-
-  // if (postsPagination?.next_page === null) {
   return (
     <>
-      <Head>
-        <img src="/Logo.svg" alt="logo" />
-      </Head>
-      <main className={styles.main}>
-        <div>
-          {postsPagination?.results.map(posts => (
+      <main className={styles.container}>
+        <img src="/logo.svg" alt="logo" />
+        <div className={styles.posts}>
+          {results?.slice(0, visiblePosts).map(posts => (
             <Link legacyBehavior href={`/post/${posts.uid}`}>
               <a key={posts.uid}>
-                <title>{posts.data.title}</title>
+                <strong>{posts.data.title}</strong>
                 <h1>{posts.data.subtitle}</h1>
-                <time>{posts.first_publication_date}</time>
-                <h3>{posts.data.author}</h3>
+                <div>
+                  <h4>
+                    <FiCalendar />
+                  </h4>
+                  <time>{posts.first_publication_date}</time>
+                  <h5>
+                    <FiUser />
+                  </h5>
+                  <h3>{posts.data.author}</h3>
+                </div>
               </a>
             </Link>
           ))}
+          {results.length > visiblePosts ? (
+            <button
+              onClick={() => setVisiblePosts(visiblePosts + 2)}
+              type="button"
+            >
+              Carregar mais posts
+            </button>
+          ) : null}
         </div>
       </main>
     </>
   );
-  // }
-  // return (
-  //   <>
-  //     <Head>
-  //       <img src="/Logo.svg" alt="logo" />
-  //     </Head>
-  //     <main>
-  //       <div>
-  //         {postsPagination?.results.map(posts => (
-  //           <Link legacyBehavior href={`/post/${posts.uid}`}>
-  //             <a key={posts.uid}>
-  //               <title>{posts.data.title}</title>
-  //               <h1>{posts.data.subtitle}</h1>
-  //               <time>{posts.first_publication_date}</time>
-  //               <h3>{posts.data.author}</h3>
-  //             </a>
-  //           </Link>
-  //         ))}
-  //         <button onClick={handleLoadMore} type="button">
-  //           Carregar mais posts
-  //         </button>
-  //       </div>
-  //     </main>
-  //   </>
-  // );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient({});
-  const postsResponse = await prismic.getByType('posts', {
+  const postPagination = await prismic.getByType('posts', {
     orderings: [{ field: 'posts.first_publication_date', direction: 'desc' }],
   });
-  console.log(postsResponse);
-  const posts = postsResponse.results.map(post => {
+
+  const results = postPagination.results.map(post => {
     return {
       uid: post.uid,
       first_publication_date: format(
         new Date(post.first_publication_date),
-        'dd/MM/yyyy'
+        'dd MMM yyyy',
+        { locale: ptBR }
       ),
       data: {
         title: post.data.title,
@@ -108,11 +92,10 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     };
   });
-  console.log(posts);
 
   return {
     props: {
-      posts,
+      results,
     },
   };
 };
